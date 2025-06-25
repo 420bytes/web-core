@@ -1,12 +1,12 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
+import { defineRoute } from '$fresh/server.ts';
+import Head from '@/components/Head.tsx';
+import { PremiumBadge } from '@/components/PremiumBadge.tsx';
 import type { State } from '@/plugins/session.ts';
-import { assertIsPrice, isStripeEnabled, stripe } from '@/utils/stripe.ts';
 import { formatCurrency } from '@/utils/display.ts';
+import { assertIsPrice, isStripeEnabled, stripe } from '@/utils/stripe.ts';
 import Stripe from 'stripe';
 import IconCheckCircle from 'tabler_icons_tsx/circle-check.tsx';
-import Head from '@/components/Head.tsx';
-import { defineRoute } from '$fresh/server.ts';
-import { PremiumBadge } from '@/components/PremiumBadge.tsx';
 
 const CARD_STYLES =
   'shadow-md flex flex-col flex-1 space-y-8 p-8 ring-1 ring-gray-300 ring-opacity-50 rounded-xl dark:bg-gray-700 bg-gradient-to-r';
@@ -17,9 +17,7 @@ function FreePlanCard() {
     <div class={CARD_STYLES}>
       <div class='flex-1 space-y-4'>
         <div>
-          <h2 class='text-xl font-bold'>
-            Free
-          </h2>
+          <h2 class='text-xl font-bold'>Free</h2>
           <p class='text-gray-500'>
             Discover and share your favorite Deno projects.
           </p>
@@ -42,10 +40,7 @@ function FreePlanCard() {
       </div>
 
       <div class='text-center'>
-        <a
-          href='/account/manage'
-          class='block w-full button-styles rounded-md'
-        >
+        <a href='/account/manage' class='block w-full button-styles rounded-md'>
           Manage
         </a>
       </div>
@@ -64,12 +59,8 @@ function PremiumPlanCard(props: PremiumCardPlanProps) {
     <div class={CARD_STYLES + ' border-primary border'}>
       <div class='flex-1 space-y-4'>
         <div>
-          <h2 class='text-xl font-bold'>
-            {props.product.name}
-          </h2>
-          <p class='text-gray-500'>
-            {props.product.description}
-          </p>
+          <h2 class='text-xl font-bold'>{props.product.name}</h2>
+          <p class='text-gray-500'>{props.product.description}</p>
         </div>
         <p>
           <span class='text-4xl font-bold'>
@@ -78,7 +69,7 @@ function PremiumPlanCard(props: PremiumCardPlanProps) {
               props.product.default_price?.currency,
             )}
           </span>
-          <span>{' '}/ {props.product.default_price.recurring?.interval}</span>
+          <span>/ {props.product.default_price.recurring?.interval}</span>
         </p>
         <p>
           <IconCheckCircle class={CHECK_STYLES} />
@@ -122,12 +113,8 @@ function EnterprisePricingCard() {
     <div class={CARD_STYLES}>
       <div class='flex-1 space-y-4'>
         <div>
-          <h2 class='text-xl font-bold'>
-            Enterprise
-          </h2>
-          <p class='text-gray-500'>
-            Make the Deno Hunt experience yours.
-          </p>
+          <h2 class='text-xl font-bold'>Enterprise</h2>
+          <p class='text-gray-500'>Make the Deno Hunt experience yours.</p>
         </div>
         <p>
           <span class='text-4xl font-bold'>Contact us</span>
@@ -138,8 +125,14 @@ function EnterprisePricingCard() {
         </p>
         <p>
           <IconCheckCircle class={CHECK_STYLES} />
-          Direct line to <a href='/users/lambtron' class='text-secondary'>Andy</a> and{' '}
-          <a href='/users/iuioiua' class='text-secondary'>Asher</a>
+          Direct line to{' '}
+          <a href='/users/lambtron' class='text-secondary'>
+            Andy
+          </a>{' '}
+          and{' '}
+          <a href='/users/iuioiua' class='text-secondary'>
+            Asher
+          </a>
         </p>
         <p>
           <IconCheckCircle class={CHECK_STYLES} />

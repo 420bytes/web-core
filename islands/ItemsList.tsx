@@ -1,15 +1,15 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import GitHubAvatarImg from "@/components/GitHubAvatarImg.tsx";
-import { type Item } from "@/utils/db.ts";
-import { timeAgo } from "@/utils/display.ts";
-import { fetchValues } from "@/utils/http.ts";
-import { Signal, useComputed, useSignal } from "@preact/signals";
-import { useEffect } from "preact/hooks";
-import { decodeTime } from "std/ulid/mod.ts";
-import IconInfo from "tabler_icons_tsx/info-circle.tsx";
+import GitHubAvatarImg from '@/components/GitHubAvatarImg.tsx';
+import { type Item } from '@/utils/db.ts';
+import { timeAgo } from '@/utils/display.ts';
+import { fetchValues } from '@/utils/http.ts';
+import { Signal, useComputed, useSignal } from '@preact/signals';
+import { useEffect } from 'preact/hooks';
+import { decodeTime } from 'std/ulid/mod.ts';
+import IconInfo from 'tabler_icons_tsx/info-circle.tsx';
 
 async function fetchVotedItems() {
-  const url = "/api/me/votes";
+  const url = '/api/me/votes';
   const resp = await fetch(url);
   if (!resp.ok) throw new Error(`Request failed: GET ${url}`);
   return (await resp.json()) as Item[];
@@ -17,10 +17,10 @@ async function fetchVotedItems() {
 
 function EmptyItemsList() {
   return (
-    <div class="flex flex-col items-center justify-center pt-16 gap-2">
-      <IconInfo class="w-10 h-10 text-gray-400 dark:text-gray-600" />
+    <div class='flex flex-col items-center justify-center pt-16 gap-2'>
+      <IconInfo class='w-10 h-10 text-gray-400 dark:text-gray-600' />
       <p>No items found</p>
-      <a href="/submit" class="text-primary hover:underline">
+      <a href='/submit' class='text-primary hover:underline'>
         Submit your project &#8250;
       </a>
     </div>
@@ -37,7 +37,7 @@ function VoteButton(props: VoteButtonProps) {
   async function onClick(event: MouseEvent) {
     if (event.detail !== 1) return;
     const resp = await fetch(`/api/vote?item_id=${props.item.id}`, {
-      method: "POST",
+      method: 'POST',
     });
     if (!resp.ok) throw new Error(await resp.text());
     props.scoreSig.value++;
@@ -45,7 +45,7 @@ function VoteButton(props: VoteButtonProps) {
   }
 
   return (
-    <button class="text-primary" type="button" onClick={onClick}>
+    <button class='text-primary' type='button' onClick={onClick}>
       ▲
     </button>
   );
@@ -64,14 +64,14 @@ function ItemSummary(props: ItemSummaryProps) {
   const isVotedSig = useSignal(props.isVoted);
 
   return (
-    <div class="flex py-2 gap-4">
+    <div class='flex py-2 gap-4'>
       <div
         class={`pr-2 text-center flex flex-col justify-center ${
-          isVotedSig.value ? "text-primary" : "hover:text-primary"
+          isVotedSig.value ? 'text-primary' : 'hover:text-primary'
         }`}
       >
         {!props.isSignedIn && (
-          <a title="Sign in to vote" href="/signin">
+          <a title='Sign in to vote' href='/signin'>
             ▲
           </a>
         )}
@@ -84,10 +84,10 @@ function ItemSummary(props: ItemSummaryProps) {
         )}
         <p>{scoreSig}</p>
       </div>
-      <div class="space-y-1">
+      <div class='space-y-1'>
         <p>
           <a
-            class="visited:text-[purple] visited:dark:text-[lightpink] hover:underline mr-4"
+            class='visited:text-[purple] visited:dark:text-[lightpink] hover:underline mr-4'
             href={props.item.url}
           >
             {props.item.title}
@@ -95,20 +95,20 @@ function ItemSummary(props: ItemSummaryProps) {
           <a
             class="hover:underline text-gray-500 after:content-['_↗']"
             href={props.item.url}
-            target="_blank"
+            target='_blank'
           >
             {new URL(props.item.url).host}
           </a>
         </p>
-        <p class="text-gray-500">
+        <p class='text-gray-500'>
           <GitHubAvatarImg
             login={props.item.userLogin}
             size={24}
-            class="mr-2"
+            class='mr-2'
           />
-          <a class="hover:underline" href={`/users/${props.item.userLogin}`}>
+          <a class='hover:underline' href={`/users/${props.item.userLogin}`}>
             {props.item.userLogin}
-          </a>{" "}
+          </a>{' '}
           {timeAgo(new Date(decodeTime(props.item.id)))}
         </p>
       </div>
@@ -126,11 +126,9 @@ export interface ItemsListProps {
 export default function ItemsList(props: ItemsListProps) {
   const itemsSig = useSignal<Item[]>([]);
   const votedItemsIdsSig = useSignal<string[]>([]);
-  const cursorSig = useSignal("");
+  const cursorSig = useSignal('');
   const isLoadingSig = useSignal<boolean | undefined>(undefined);
-  const itemsAreVotedSig = useComputed(() =>
-    itemsSig.value.map((item) => votedItemsIdsSig.value.includes(item.id))
-  );
+  const itemsAreVotedSig = useComputed(() => itemsSig.value.map((item) => votedItemsIdsSig.value.includes(item.id)));
 
   async function loadMoreItems() {
     if (isLoadingSig.value) return;
@@ -138,15 +136,15 @@ export default function ItemsList(props: ItemsListProps) {
     try {
       const { values, cursor } = await fetchValues<Item>(
         props.endpoint,
-        cursorSig.value
+        cursorSig.value,
       );
       itemsSig.value = [...itemsSig.value, ...values];
       cursorSig.value = cursor;
     } catch (error) {
       if (error instanceof Error) {
-        console.error("Failed to load items:", error.message);
+        console.error('Failed to load items:', error.message);
       } else {
-        console.error("Error loading items:", error);
+        console.error('Error loading items:', error);
       }
     } finally {
       isLoadingSig.value = false;
@@ -161,35 +159,34 @@ export default function ItemsList(props: ItemsListProps) {
 
     fetchVotedItems()
       .then(
-        (votedItems) =>
-          (votedItemsIdsSig.value = votedItems.map(({ id }) => id))
+        (votedItems) => (votedItemsIdsSig.value = votedItems.map(({ id }) => id)),
       )
       .finally(() => loadMoreItems());
   }, []);
 
   if (isLoadingSig.value === undefined) {
-    return <p class="link-styles">Loading...</p>;
+    return <p class='link-styles'>Loading...</p>;
   }
 
   return (
     <div>
-      {itemsSig.value.length ? (
-        itemsSig.value.map((item, id) => {
-          return (
-            <ItemSummary
-              key={item.id}
-              item={item}
-              isVoted={itemsAreVotedSig.value[id]}
-              isSignedIn={props.isSignedIn}
-            />
-          );
-        })
-      ) : (
-        <EmptyItemsList />
-      )}
-      {cursorSig.value !== "" && (
-        <button class="mt-4" type="button" onClick={loadMoreItems}>
-          {isLoadingSig.value ? "Loading..." : "Load more"}
+      {itemsSig.value.length
+        ? (
+          itemsSig.value.map((item, id) => {
+            return (
+              <ItemSummary
+                key={item.id}
+                item={item}
+                isVoted={itemsAreVotedSig.value[id]}
+                isSignedIn={props.isSignedIn}
+              />
+            );
+          })
+        )
+        : <EmptyItemsList />}
+      {cursorSig.value !== '' && (
+        <button class='mt-4' type='button' onClick={loadMoreItems}>
+          {isLoadingSig.value ? 'Loading...' : 'Load more'}
         </button>
       )}
     </div>

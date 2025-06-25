@@ -8,8 +8,8 @@ import { getPost } from '@/utils/posts.ts';
 export default defineRoute(async (_req, ctx) => {
   const post = await getPost(ctx.params.slug);
   if (post === null) return await ctx.renderNotFound();
-  const publishDate = !post.publishedAt ? null : new Date(post.publishedAt) ?? null;
-  const updatedAt = !post.updatedAt ? null : new Date(post.updatedAt) ?? null;
+  const publishDate = !post.publishedAt ? null : new Date(post.publishedAt);
+  const updatedAt = !post.updatedAt ? null : new Date(post.updatedAt);
 
   return (
     <>

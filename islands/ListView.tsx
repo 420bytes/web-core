@@ -40,7 +40,7 @@ export default function ListView(props: {
 
   useEffect(() => {
     (async () => {
-      while (1) {
+      while (!busy) {
         const mutations = Array.from(localMutations.current);
         localMutations.current = new Map();
         setHasLocalMutations(false);
@@ -111,10 +111,7 @@ export default function ListView(props: {
           placeholder='Paste a link to post and expand'
           ref={addTodoInput}
         />
-        <Button
-          onClick={addTodo}
-          disabled={adding}
-        >
+        <Button onClick={addTodo} disabled={adding}>
           Add
         </Button>
       </div>
@@ -176,6 +173,8 @@ function ListItem({
             defaultValue={item.url}
           />
           <button
+            class='ms-2'
+            type='button'
             title='Save'
             onClick={doSave}
             disabled={busy}
@@ -183,6 +182,8 @@ function ListItem({
             💾
           </button>
           <button
+            class='ms-2'
+            type='button'
             title='Cancel'
             onClick={cancelEdit}
             disabled={busy}
@@ -194,10 +195,14 @@ function ListItem({
       {!editing && (
         <>
           <div class='absolute w-3 h-3 bg-gray-200 rounded-full mt-1.5 -start-1.5 border border-white dark:border-gray-900 dark:bg-gray-700' />
-          <time class='text-sm font-normal leading-none text-gray-400 dark:text-gray-500'>{timestamp}</time>
+          <time class='text-sm font-normal leading-none text-gray-400 dark:text-gray-500'>
+            {timestamp}
+          </time>
           <div class='mt-2' />
           <Iframely url={String(item.url || item.text)} />
-          <Button onClick={doDelete} class='mt-4'>delete</Button>
+          <Button onClick={doDelete} class='mt-4'>
+            delete
+          </Button>
         </>
       )}
     </li>

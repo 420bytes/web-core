@@ -69,7 +69,10 @@
       "dev.ts",
       "deno.json"
     ],
-    "rules": { "tags": ["fresh", "recommended"] }
+    "rules": {
+      "tags": ["fresh", "recommended"],
+      "exclude": ["react-no-danger"]
+    }
   },
   "fmt": {
     "include": [

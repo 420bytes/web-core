@@ -38,7 +38,7 @@ export default defineRoute(async (_req, ctx) => {
           </p>
         </div>
         <div class='flex flex-col md:flex-row columns-1 gap-4'>
-          {posts.map((post) => <PostCard {...post} />)}
+          {posts.map((post: Post) => <PostCard key={post.slug} {...post} />)}
         </div>
       </main>
     </>
