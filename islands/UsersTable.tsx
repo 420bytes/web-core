@@ -95,7 +95,7 @@ export default function UsersTable(props: UsersTableProps) {
         </tbody>
       </table>
       {cursorSig.value !== "" && (
-        <button onClick={loadMoreUsers}>
+        <button class="mt-4" type="button" onClick={loadMoreUsers}>
           {isLoadingSig.value ? "Loading..." : "Load more"}
         </button>
       )}

@@ -44,7 +44,11 @@ function VoteButton(props: VoteButtonProps) {
     props.isVotedSig.value = true;
   }
 
-  return <button onClick={onClick}>▲</button>;
+  return (
+    <button class="text-primary" type="button" onClick={onClick}>
+      ▲
+    </button>
+  );
 }
 
 interface ItemSummaryProps {
@@ -184,7 +188,7 @@ export default function ItemsList(props: ItemsListProps) {
         <EmptyItemsList />
       )}
       {cursorSig.value !== "" && (
-        <button onClick={loadMoreItems}>
+        <button class="mt-4" type="button" onClick={loadMoreItems}>
           {isLoadingSig.value ? "Loading..." : "Load more"}
         </button>
       )}
