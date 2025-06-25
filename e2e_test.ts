@@ -17,17 +17,10 @@ import {
   type Item,
 } from "@/utils/db.ts";
 import { stripe } from "@/utils/stripe.ts";
-import {
-  assert,
-  assertArrayIncludes,
-  assertEquals,
-  assertInstanceOf,
-  assertNotEquals,
-  assertObjectMatch,
-  assertStringIncludes,
-} from "std/assert/mod.ts";
+import { assert, assertEquals, assertInstanceOf, assertNotEquals, assertObjectMatch, assertStringIncludes, } from 'https://deno.land/std@0.216.0/assert/mod.ts';
+import { resolvesNext, returnsNext, stub } from "https://deno.land/std@0.216.0/testing/mock.ts";
+import { assertArrayIncludes } from 'std/assert/assert_array_includes.ts';
 import { STATUS_CODE, isRedirectStatus } from "std/http/status.ts";
-import { resolvesNext, returnsNext, stub } from "std/testing/mock.ts";
 import Stripe from "stripe";
 
 const BASE_URI = Deno.env.get("BASE_URI") ?? `http://localhost:8000`;
@@ -151,7 +144,7 @@ Deno.test("[e2e] GET /callback", async (test) => {
     };
     const stripeRespBody: Partial<Stripe.Response<Stripe.Customer>> = { id };
     const fetchStub = stub(
-      window,
+      globalThis,
       "fetch",
       returnsNext([
         Promise.resolve(Response.json(githubRespBody)),
@@ -189,7 +182,7 @@ Deno.test("[e2e] GET /callback", async (test) => {
     };
     const stripeRespBody: Partial<Stripe.Response<Stripe.Customer>> = { id };
     const fetchStub = stub(
-      window,
+      globalThis,
       "fetch",
       returnsNext([
         Promise.resolve(Response.json(githubRespBody)),
@@ -341,8 +334,8 @@ Deno.test("[e2e] GET /api/items", async () => {
   const { values } = await resp.json();
 
   assertEquals(resp.status, STATUS_CODE.OK);
-  assertJson(resp);
   assertArrayIncludes(values, [item1, item2]);
+  assertJson(resp);
 });
 
 Deno.test("[e2e] POST /submit", async (test) => {

@@ -1,10 +1,10 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
-import { Plugin } from '$fresh/server.ts';
 import type { FreshContext } from '$fresh/server.ts';
-import { getSessionId } from 'kv_oauth/mod.ts';
-import { getUserBySession } from '@/utils/db.ts';
+import { Plugin } from '$fresh/server.ts';
 import type { User } from '@/utils/db.ts';
+import { getUserBySession } from '@/utils/db.ts';
 import { UnauthorizedError } from '@/utils/http.ts';
+import { getSessionId } from 'kv_oauth/mod.ts';
 
 export interface State {
   sessionUser?: User;
@@ -26,7 +26,7 @@ async function setSessionState(req: Request, ctx: FreshContext<State>) {
   // Initial state
   ctx.state.sessionUser = undefined;
 
-  const sessionId = getSessionId(req);
+  const sessionId = await getSessionId(req);
   if (sessionId === undefined) return await ctx.next();
   const user = await getUserBySession(sessionId);
   if (user === null) return await ctx.next();

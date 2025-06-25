@@ -21,7 +21,7 @@ export default function ListView(props: {
   const [adding, setAdding] = useState(false);
 
   useEffect(() => {
-    let es = new EventSource(window.location.href);
+    let es = new EventSource(globalThis.location.href);
 
     es.addEventListener('message', (e) => {
       const newData: FeedList = JSON.parse(e.data);
@@ -34,7 +34,7 @@ export default function ListView(props: {
       es.close();
       const backoff = 10000 + Math.random() * 5000;
       await new Promise((resolve) => setTimeout(resolve, backoff));
-      es = new EventSource(window.location.href);
+      es = new EventSource(globalThis.location.href);
     });
   }, []);
 
@@ -58,7 +58,7 @@ export default function ListView(props: {
               }));
             while (true) {
               try {
-                await axios.post(window.location.href, chunk);
+                await axios.post(globalThis.location.href, chunk);
                 break;
               } catch {
                 await new Promise((resolve) => setTimeout(resolve, 1000));

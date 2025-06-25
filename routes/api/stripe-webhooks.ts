@@ -1,10 +1,10 @@
 // Copyright 2023-2024 the Deno authors. All rights reserved. MIT license.
 import { type Handlers } from '$fresh/server.ts';
-import { STATUS_CODE } from 'std/http/status.ts';
-import { isStripeEnabled, stripe } from '@/utils/stripe.ts';
-import Stripe from 'stripe';
 import { getUserByStripeCustomer, updateUser } from '@/utils/db.ts';
 import { BadRequestError } from '@/utils/http.ts';
+import { isStripeEnabled, stripe } from '@/utils/stripe.ts';
+import { STATUS_CODE } from 'std/http/status.ts';
+import Stripe from 'stripe';
 
 const cryptoProvider = Stripe.createSubtleCryptoProvider();
 export const handler: Handlers = {
@@ -41,7 +41,10 @@ export const handler: Handlers = {
         cryptoProvider,
       );
     } catch (error) {
-      throw new BadRequestError(error.message);
+      if (error instanceof Stripe.errors.StripeSignatureVerificationError) {
+        throw new BadRequestError(error.message);
+      }
+      throw error;
     }
 
     // @ts-ignore: Property 'customer' actually does exist on type 'Object'

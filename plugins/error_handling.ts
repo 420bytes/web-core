@@ -47,11 +47,13 @@ export default {
           try {
             return await ctx.next();
           } catch (error) {
-            const status = toErrorStatus(error);
-            return new Response(error.message, {
-              statusText: STATUS_TEXT[status],
-              status,
-            });
+            if (error instanceof Error) {
+              const status = toErrorStatus(error);
+              return new Response(error.message, {
+                statusText: STATUS_TEXT[status],
+                status,
+              });
+            }
           }
         },
       },

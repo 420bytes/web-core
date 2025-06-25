@@ -40,7 +40,7 @@ import * as $Iframely from './islands/Iframely.tsx';
 import * as $ItemsList from './islands/ItemsList.tsx';
 import * as $ListView from './islands/ListView.tsx';
 import * as $UsersTable from './islands/UsersTable.tsx';
-import { type Manifest } from '$fresh/server.ts';
+import type { Manifest } from '$fresh/server.ts';
 
 const manifest = {
   routes: {
